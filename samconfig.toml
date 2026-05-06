@@ -1,0 +1,12 @@
+version = 0.1
+
+[default.build.parameters]
+cached = true
+parallel = true
+
+[default.deploy.parameters]
+stack_name   = "concierge"
+region       = "us-east-1"
+profile      = "personal"
+capabilities = "CAPABILITY_IAM"
+confirm_changeset = true

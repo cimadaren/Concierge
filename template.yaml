@@ -1,0 +1,51 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Description: >
+  Concierge — LLM-agnostic assistant for DC Public Library availability
+  and movie streaming lookup.
+
+Globals:
+  Function:
+    Runtime: python3.12
+    Timeout: 15
+    MemorySize: 256
+
+Resources:
+
+  ConciergeFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: app/
+      Handler: main.handler
+      Description: Concierge API handler
+      Policies:
+        - SSMParameterReadPolicy:
+            ParameterName: /concierge/*
+      Events:
+        Health:
+          Type: HttpApi
+          Properties:
+            Path: /health
+            Method: GET
+        Search:
+          Type: HttpApi
+          Properties:
+            Path: /search
+            Method: POST
+
+  ConciergeLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${ConciergeFunction}
+      RetentionInDays: 14
+
+Outputs:
+
+  ApiUrl:
+    Description: Concierge API endpoint
+    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com"
+
+  FunctionName:
+    Description: Lambda function name
+    Value: !Ref ConciergeFunction
