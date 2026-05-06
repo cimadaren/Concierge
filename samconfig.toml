@@ -5,8 +5,9 @@ cached = true
 parallel = true
 
 [default.deploy.parameters]
-stack_name   = "concierge"
-region       = "us-east-1"
-profile      = "personal"
-capabilities = "CAPABILITY_IAM"
+stack_name        = "concierge"
+region            = "us-east-1"
+profile           = "personal"
+capabilities      = "CAPABILITY_IAM"
 confirm_changeset = true
+resolve_s3        = true
